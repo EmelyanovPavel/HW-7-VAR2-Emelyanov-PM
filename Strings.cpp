@@ -1,3 +1,5 @@
+//Topic 7. Strings.
+
 #include <iostream>
 #include <cstdlib>
 #include <string>
@@ -5,18 +7,17 @@
 #include <unordered_map>
 
 //Task 1.
-//2) Заменить каждую цифру в строке на букву латинского алфавита. 0 на a, 1 на b, 2 на c и т.д.
+//2)Replace each digit in the string with a letter of the Latin alphabet. 0 on a, 1 on b, 2 on c, etc.
 
 std::string replaceDigitsWithLetters(const std::string& input) {
     std::string result = input;
 
-    // Проходим по каждому символу в строке
+    //go through each character in the string
     for (size_t i = 0; i < result.length(); ++i) {
-        // Проверяем, является ли символ цифрой
+        //Checking whether the character is a digit
         if (isdigit(result[i])) {
-            // Преобразуем цифру в букву:
-            // '0' = 48 в ASCII, 'a' = 97 в ASCII
-            // Разница между ними 48, поэтому вычитаем 48 и прибавляем 97
+            // Converting a digit to a letter: '0' = 48 in ASCII, 'a' = 97 in ASCII
+            // The difference between them is 48, so we subtract 48 and add 97
             result[i] = 'a' + (result[i] - '0');
         }
     }
@@ -36,7 +37,6 @@ void task1() {
 }
 
 //Task 2.
-//Выяснить, имеются ли в строке два соседствующих одинаковых символа. Если имеются, то удалить все данные пары.
 // Find out if there are two adjacent identical characters in the string. If available, delete all these pairs.
 
 void task2() {
@@ -45,7 +45,8 @@ void task2() {
     std::cout << "Enter a string: ";
     std::getline(std::cin, input);
     std::unordered_map<char, int> charCount;
-    // Подсчёт повторяющихся символов
+    
+    //Counting duplicate characters
     for (char c : input) {
         if (charCount.find(c) != charCount.end()) {
             charCount[c]++;
@@ -54,7 +55,7 @@ void task2() {
             charCount[c] = 1;
         }
     }
-    // Формирование строки без повторяющихся символов 
+    //Forming a string without repeating characters
     std::string result;
     for (char c : input) {
         if (charCount[c] == 1) {
@@ -70,4 +71,3 @@ int main()
     task2();
     return 0;
 }
-
