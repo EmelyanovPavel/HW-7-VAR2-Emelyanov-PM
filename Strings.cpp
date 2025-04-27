@@ -1,80 +1,99 @@
 //Topic 7. Strings.
 
 #include <iostream>
-#include <cstdlib>
-#include <string>
-#include <cctype>
+#include <cstdio>
+#include <cstring>
 
 //Task 1.
 //2)Replace each digit in the string with a letter of the Latin alphabet. 0 on a, 1 on b, 2 on c, etc.
 
-std::string replaceDigitsWithLetters(const std::string& input) {
-    std::string result = input;
-
-    //go through each character in the string
-    for (size_t i = 0; i < result.length(); ++i) {
+//Function for replacing numbers with letters
+void replaceDigits(char* str) 
+{
+    
+    //Go through each character of the string
+    for (int i = 0; str[i] != '\0'; i++) 
+    {
         
         //Checking whether the character is a digit
-        if (isdigit(result[i])) {
+        if (str[i] >= '0' && str[i] <= '9') 
+        {
             
-            // Converting a digit to a letter: '0' = 48 in ASCII, 'a' = 97 in ASCII
-            // The difference between them is 48, so we subtract 48 and add 97
-            result[i] = 'a' + (result[i] - '0');
+            // Calculating the offset from ' 0 ' to 'a'
+            // and replace the number with the corresponding letter
+            str[i] = str[i] - '0' + 'a';
+            
         }
     }
-
-    return result;
 }
 
-void task1() {
-    std::string input;
-
-    std::cout << "Enter a string: ";
-    std::getline(std::cin, input);
-
-    std::string result = replaceDigitsWithLetters(input);
-
-    std::cout << "Result: " << result << std::endl;
+void task1() 
+{
+    
+    //Usage example
+    char input[100];
+    std::cin.getline(input, 100);
+    
+    //Output the original string
+    std::cout << "Source string: " << input;
+    
+    // Replacing numbers with letters
+    replaceDigits(input);
+    
+    //Displaying the result
+    std::cout << "\nString after replacing symbols: " << input << std::endl;
+    
 }
 
 //Task 2.
 //2) Find out if there are two adjacent identical characters in the string. If available, delete all these pairs.
 
-std::string removeAdjacentDuplicates(std::string s) {
-    // Creating a new line for the result
-    std::string result;
+void removeAdjacentDuplicates(char* str) 
+{
+    //If the string is empty or consists of a single character
+    if (strlen(str) <= 1)
+        return;
+
+    //Creating two pointers: one for reading and one for writing
+    char* read = str;
+    char* write = str;
     
-    // Go through all the characters of the source string
-    for (size_t i = 0; i < s.length(); ++i) {
-        
-        //If it is not the last character and it matches the next one
-        if (i + 1 < s.length() && s[i] == s[i + 1]) {
-            
-            //Skip both characters
-            i++;
-        } else {
-            
-            //Adding a character to the result
-            result += s[i];
+    //Go through the line
+    while (*read) 
+    {
+        // If the current character is not equal to the next one
+        if (*read != *(read + 1)) 
+        {
+            *write = *read;
+            write++;
         }
+        read++;
     }
     
-    return result;
+    //Ending a new line with a null character
+    *write = '\0';
 }
 
-void task2() {
-    std::string input;
+void task2() 
+{
+    
+    char str[100];
+    
     std::cout << "Enter a string: ";
-    std::getline(std::cin, input);
+    std::cin.getline(str, 100);
     
-    std::string result = removeAdjacentDuplicates(input);
+    removeAdjacentDuplicates(str);
     
-    std::cout << "New string: " << result << std::endl; 
+    std::cout << "\nString after deleting symbols pairs: " << str << std::endl;
+    
 }
 
 int main()
 {
+    
     task1();
     task2();
+    
     return 0;
+    
 }
