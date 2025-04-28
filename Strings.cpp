@@ -1,91 +1,85 @@
 //Topic 7. Strings.
 
 #include <iostream>
-#include <cstdio>
-#include <cstring>
 
-//Task 1.
-//2)Replace each digit in the string with a letter of the Latin alphabet. 0 on a, 1 on b, 2 on c, etc.
+// //Task 1.
+// //2)Replace each digit in the string with a letter of the Latin alphabet. 0 on a, 1 on b, 2 on c, etc.
 
-//Function for replacing numbers with letters
-void replaceDigits(char* str) 
+// //Function for replacing numbers with letters
+void task1()
 {
-    
-    //Go through each character of the string
-    for (int i = 0; str[i] != '\0'; i++) 
-    {
-        
-        //Checking whether the character is a digit
-        if (str[i] >= '0' && str[i] <= '9') 
-        {
-            
-            // Calculating the offset from ' 0 ' to 'a'
-            // and replace the number with the corresponding letter
-            str[i] = str[i] - '0' + 'a';
-            
-        }
-    }
-}
-
-void task1() 
-{
-    
-    //Usage example
+    // Создаем массив для входной строки
     char input[100];
+    
+    // Получаем строку от пользователя
+    std::cout << "Enter a string of numbers: ";
     std::cin.getline(input, 100);
     
-    //Output the original string
-    std::cout << "Source string: " << input;
-    
-    // Replacing numbers with letters
-    replaceDigits(input);
-    
-    //Displaying the result
-    std::cout << "\nString after replacing symbols: " << input << std::endl;
-    
-}
-
-//Task 2.
-//2) Find out if there are two adjacent identical characters in the string. If available, delete all these pairs.
-
-void removeAdjacentDuplicates(char* str) 
-{
-    //If the string is empty or consists of a single character
-    if (strlen(str) <= 1)
-        return;
-
-    //Creating two pointers: one for reading and one for writing
-    char* read = str;
-    char* write = str;
-    
-    //Go through the line
-    while (*read) 
-    {
-        // If the current character is not equal to the next one
-        if (*read != *(read + 1)) 
-        {
-            *write = *read;
-            write++;
+    //go through each character of the string
+    for(int i = 0; input[i] != '\0'; i++) {
+        
+        //Checking whether the character is a digit
+        if(input[i] >= '0' && input[i] <= '9') {
+            
+            //Converting a digit to a letter
+             // '0' in ASCII = 48, 'a' = 97
+             // Difference between '0' and 'a' = 49
+            input[i] = input[i] + 49;
         }
-        read++;
     }
     
-    //Ending a new line with a null character
-    *write = '\0';
+    //Displaying the result
+    std::cout << "The string after replacing symbols: " << input << std::endl;
 }
 
-void task2() 
-{
+// //Task 2.
+// //2) Find out if there are two adjacent identical characters in the string. If available, delete all these pairs.
+
+//Function for calculating the string length
+int strlen(const char* str) {
+    int length = 0;
+    while (str[length] != '\0') {
+        length++;
+    }
+    return length;
+}
+
+//Function for deleting pairs of identical characters
+void removeAdjacentPairs(char* str) {
+    int length = strlen(str);
     
-    char str[100];
+    //If the string is empty or contains only one character
+    if (length <= 1) {
+        return;
+    }
     
-    std::cout << "Enter a string: ";
-    std::cin.getline(str, 100);
+    int writeIndex = 0;  //Index for writing new characters
     
-    removeAdjacentDuplicates(str);
+    //Go through the line
+    for (int readIndex = 0; readIndex < length; readIndex++) {
+        //If the current character is not equal to the next or it is the last character
+        if (readIndex == length - 1 || str[readIndex] != str[readIndex + 1]) {
+            str[writeIndex++] = str[readIndex];
+        }
+        //If you find a pair of identical characters, skip both of them
+        else {
+            readIndex++;  //Skip the second character from the pair
+        }
+    }
     
-    std::cout << "\nString after deleting symbols pairs: " << str << std::endl;
+    //Ending the string with a null character
+    str[writeIndex] = '\0';
+}
+
+void task2() {
+    char input[100];
     
+    std::cout << "Enter the string: ";
+    std::cin.getline(input, 100);
+    
+    removeAdjacentPairs(input);
+    
+    std::cout << "The string after deleting symbols: " << input << std::endl;
 }
 
 int main()
