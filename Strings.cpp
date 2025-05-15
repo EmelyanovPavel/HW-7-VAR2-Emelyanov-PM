@@ -8,10 +8,10 @@
 // //Function for replacing numbers with letters
 void task1()
 {
-    // Создаем массив для входной строки
+    // Creating an array for the input string
     char input[100];
     
-    // Получаем строку от пользователя
+    // Getting a string from the user
     std::cout << "Enter a string of numbers: ";
     std::cin.getline(input, 100);
     
@@ -32,62 +32,82 @@ void task1()
     std::cout << "The string after replacing symbols: " << input << std::endl;
 }
 
-// //Task 2.
+// //Task 2. This assignment involves implementing a memory reallocating function to resize the source string for compression and to get rid of unnecessary memory during passing and processing.
 // //2) Find out if there are two adjacent identical characters in the string. If available, delete all these pairs.
 
-//Function for calculating the string length
-int strlen(const char* str) {
-    int length = 0;
-    while (str[length] != '\0') {
-        length++;
-    }
-    return length;
+// Function for reallocating memory
+char* reallocString(char* str, size_t newSize) 
+{
+    char* newStr = (char*)realloc(str, newSize + 1);
+    if (newStr == NULL) 
+    {
+        std::cerr << "Memory allocation error!";
+        exit(1);
+    } 
+    return newStr;
 }
 
-//Function for deleting pairs of identical characters
-void removeAdjacentPairs(char* str) {
-    int length = strlen(str);
+// Function for deleting pairs of identical characters
+char* removeAdjacentDuplicates(char* str) {
+    size_t len = 0;
+    // Calculating the string length
+    while (str[len] != '\0') len++;
     
-    //If the string is empty or contains only one character
-    if (length <= 1) {
-        return;
+    size_t newLen = len;
+    size_t i = 0;
+    
+    // going through the string and look for pairs of identical characters
+    while (i < newLen - 1) {
+        if (str[i] == str[i + 1]) {
+            //Finding the end of a sequence of identical characters
+            size_t j = i + 1;
+            while (j < newLen && str[j] == str[i]) j++;
+            
+            // Move the remaining characters to the left
+            for (size_t k = i; k < newLen; k++) {
+                str[k] = str[k + (j - i)];
+            }
+            
+            // Updating the string length
+            newLen -= (j - i);
+            
+            // Reallocating memory
+            str = reallocString(str, newLen);
+            
+            // Go back a step to check
+            if (i > 0) i--;
+        } else {
+            i++;
+        }
     }
     
-    int writeIndex = 0;  //Index for writing new characters
-    
-    //Go through the line
-    for (int readIndex = 0; readIndex < length; readIndex++) {
-        //If the current character is not equal to the next or it is the last character
-        if (readIndex == length - 1 || str[readIndex] != str[readIndex + 1]) {
-            str[writeIndex++] = str[readIndex];
-        }
-        //If you find a pair of identical characters, skip both of them
-        else {
-            readIndex++;  //Skip the second character from the pair
-        }
-    }
-    
-    //Ending the string with a null character
-    str[writeIndex] = '\0';
+    // Adding a terminal character
+    str[newLen] = '\0';
+    return str;
 }
 
 void task2() {
-    char input[100];
-    
+    // Usage example
+    char* input = (char*)malloc(100 * sizeof(char));
     std::cout << "Enter the string: ";
-    std::cin.getline(input, 100);
+    fgets(input, 100, stdin);
     
-    removeAdjacentPairs(input);
+    // Removing the newline character
+    size_t len = 0;
+    while (input[len] != '\0' && input[len] != '\n') len++;
+    input[len] = '\0';
     
-    std::cout << "The string after deleting symbols: " << input << std::endl;
+    // Deleting pairs of identical characters
+    input = removeAdjacentDuplicates(input);
+    
+    std::cout << "The string after deleting pairs of identical characters: " << input;
+    free(input);
 }
 
 int main()
-{
-    
+{ 
     task1();
     task2();
     
     return 0;
-    
 }
